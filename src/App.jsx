@@ -3,6 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import SignupForm from "./pages/SignupForm";
+import SignInForm from "./pages/SignInForm";
 
 const App = () => {
   return (
@@ -12,6 +14,8 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
         </Route>
+        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/signin" element={<SignInForm />} />
       </Routes>
     </BrowserRouter>
   );
