@@ -5,19 +5,25 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import SignupForm from "./pages/SignupForm";
 import SignInForm from "./pages/SignInForm";
-
+import AuthContext from "./context/AuthContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css";
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-        </Route>
-        <Route path="/signup" element={<SignupForm />} />
-        <Route path="/signin" element={<SignInForm />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthContext>
+      <BrowserRouter>
+        <ToastContainer />
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
+          </Route>
+          <Route path="/signup" element={<SignupForm />} />
+          <Route path="/signin" element={<SignInForm />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthContext>
   );
 };
 
