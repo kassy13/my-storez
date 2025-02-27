@@ -1,8 +1,25 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../img/image-removebg-preview (1).png";
+import Auth from "../../../context/context";
 
 const NavBar = () => {
+  const { logout } = useContext(Auth);
+  const [currentUser, setCurrentUser] = useState("");
+  const navigate = useNavigate();
+  useEffect(() => {
+    const loggedUser = sessionStorage.getItem("currentUser");
+    setCurrentUser(loggedUser);
+  }, [currentUser]);
+
+  const handleClick = async () => {
+    if (currentUser) {
+      await logout();
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    }
+  };
   return (
     <nav className="flex gap-5 justify-between items-center w-full">
       <div>
@@ -38,15 +55,30 @@ const NavBar = () => {
           About{" "}
         </NavLink>
       </div>
-      <div>
+      <div className="flex">
         <Link
           to={"/signup"}
           className=" bg-gray-400 p-1.5 px-4 rounded text-slate-900 "
         >
-          SignUp
+          Register
         </Link>
-        <Link to={"/signin"} className="text-white p-1.5 ml-5">
-          SignIn
+        <Link
+          to={"/signin"}
+          className={`text-white p-1.5 ml-5  ${
+            currentUser ? "!hidden" : "!block"
+          }`}
+          onClick={handleClick}
+        >
+          Sign In
+        </Link>
+        <Link
+          to={"/"}
+          className={`text-white p-1.5 ml-5 ${
+            currentUser ? "!block" : "!hidden"
+          }`}
+          onClick={handleClick}
+        >
+          Logout
         </Link>
       </div>
     </nav>
