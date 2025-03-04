@@ -9,6 +9,7 @@ import AuthContext from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import "react-toastify/dist/ReactToastify.css";
+import CategoryPage from "./pages/CategoryPage";
 const App = () => {
   return (
     <AuthContext>
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
+            <Route path="category/:category" element={<CategoryPage />} />
           </Route>
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/signin" element={<SignInForm />} />

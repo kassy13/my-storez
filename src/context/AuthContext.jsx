@@ -4,6 +4,8 @@ import { account } from "../Appwrite/client";
 
 const AuthContext = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [categoryProducts, setcategoryProducts] = useState([]);
   console.log(user);
   //   Function for sign-in
   const signup = async ({ name, email, password }) => {
@@ -26,12 +28,62 @@ const AuthContext = ({ children }) => {
     try {
       await account.deleteSession("current");
       sessionStorage.removeItem("currentUser");
+      setUser(null);
     } catch (err) {
       console.log(err);
     }
   };
+
+  // Getting all category list
+  const getAllCategories = async () => {
+    try {
+      const response = await fetch(
+        "https://dummyjson.com/products/category-list"
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log("data", data);
+        setCategories(data);
+        return data;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Get products by category
+  const getProductsByCategory = async (category) => {
+    try {
+      const response = await fetch(
+        `https://dummyjson.com/products/category/${category}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log("data", data);
+        setcategoryProducts(data.products);
+        return data.products;
+      } else {
+        throw new Error("Failed to fetch category products");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <Auth.Provider value={{ signup, signIn, logout }}>{children}</Auth.Provider>
+    <Auth.Provider
+      value={{
+        signup,
+        signIn,
+        logout,
+        categories,
+        getAllCategories,
+        getProductsByCategory,
+        categoryProducts,
+      }}
+    >
+      {children}
+    </Auth.Provider>
   );
 };
 
