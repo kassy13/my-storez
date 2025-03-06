@@ -1,19 +1,20 @@
 import React, { useContext, useEffect } from "react";
 import Auth from "../context/context";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const CategoryPage = () => {
+  const navigate = useNavigate();
   const { category } = useParams();
   console.log(category);
   const { getProductsByCategory, categoryProducts } = useContext(Auth);
   console.log("categoryProducts", categoryProducts);
   useEffect(() => {
-    // const hello = async () => {
-    //   await getProductsByCategory("tops");
-    // };
-    // hello();
     getProductsByCategory(category);
   }, [category]);
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId.id}`);
+  };
+
   return (
     <div>
       <h2>Categories: {category}</h2>
@@ -25,8 +26,16 @@ const CategoryPage = () => {
               alt=""
               className="w-full h-56 object-cover"
             />
-            <h3 className="">{product.title}</h3>
-            <p>NGN {product.price}</p>
+            <div>
+              <h3 className="">{product.title}</h3>
+              <p>NGN {product.price}</p>
+              <button
+                className="bg-slate-900 text-white p-1"
+                onClick={() => handleProductClick(product)}
+              >
+                View Details
+              </button>
+            </div>
           </div>
         ))}
       </div>

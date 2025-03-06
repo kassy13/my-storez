@@ -10,6 +10,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import "react-toastify/dist/ReactToastify.css";
 import CategoryPage from "./pages/CategoryPage";
+import Error from "./pages/Error";
+import ProductDetails from "./pages/ProductDetails";
 const App = () => {
   return (
     <AuthContext>
@@ -20,9 +22,11 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="category/:category" element={<CategoryPage />} />
+            <Route path="product/:productId" element={<ProductDetails />} />
           </Route>
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/signin" element={<SignInForm />} />
+          <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>
     </AuthContext>

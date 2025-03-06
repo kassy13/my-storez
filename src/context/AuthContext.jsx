@@ -70,6 +70,20 @@ const AuthContext = ({ children }) => {
     }
   };
 
+  // Function to get product by Id
+  const getProductById = async (id) => {
+    try {
+      const response = await fetch(`https://dummyjson.com/products/${id}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("data from products by id", data);
+        return data;
+      }
+    } catch (err) {
+      console.log("error Fetching Product", err);
+    }
+  };
+
   return (
     <Auth.Provider
       value={{
@@ -80,6 +94,7 @@ const AuthContext = ({ children }) => {
         getAllCategories,
         getProductsByCategory,
         categoryProducts,
+        getProductById,
       }}
     >
       {children}
