@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Auth from "./context";
-import { account } from "../Appwrite/client";
+import { account, databases } from "../Appwrite/client";
+import { toast } from "react-toastify";
+import { ID } from "appwrite";
 
 const AuthContext = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -84,6 +86,37 @@ const AuthContext = ({ children }) => {
     }
   };
 
+  // Adding to cart
+  const currentLoggedInUser = sessionStorage.getItem("currentUser");
+  console.log(currentLoggedInUser);
+  const handleAddToCart = async (product, quantity) => {
+    const totalPrice = product.price * quantity;
+    const orderCart = {
+      userId: currentLoggedInUser,
+      productId: product.id.toString(),
+      price: product.price,
+      quantity: quantity,
+      totalPrice,
+      // title: product.title,
+      imgUrl: product.images[0],
+    };
+    try {
+      const response = await databases.createDocument(
+        "67d29ac30006c46f0544",
+        "67d29c03000faaefb5a0",
+        ID.unique(),
+        orderCart
+      );
+      console.log("Order response:", response);
+      if (response.ok) {
+        return response;
+      }
+    } catch (err) {
+      console.error("failed to add product", err);
+      toast.error(err);
+    }
+  };
+
   return (
     <Auth.Provider
       value={{
@@ -95,6 +128,7 @@ const AuthContext = ({ children }) => {
         getProductsByCategory,
         categoryProducts,
         getProductById,
+        handleAddToCart,
       }}
     >
       {children}

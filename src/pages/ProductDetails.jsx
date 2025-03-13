@@ -1,15 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Auth from "../context/context";
+import { toast } from "react-toastify";
 
 const ProductDetails = () => {
   const { productId } = useParams();
-  console.log(productId);
-  const { getProductById } = useContext(Auth);
+
+  const { getProductById, handleAddToCart } = useContext(Auth);
   const navigate = useNavigate();
   const [product, setproduct] = useState(null);
   const [totalprice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
+
+  const currentLoggedInUser = sessionStorage.getItem("currentUser");
+  console.log(currentLoggedInUser);
+  console.log(product);
   useEffect(() => {
     const fetchProduct = async () => {
       const fetchedProduct = await getProductById(productId);
@@ -26,6 +31,30 @@ const ProductDetails = () => {
     const newQuantity = parseFloat(e.target.value) || 1;
     setQuantity(newQuantity);
     setTotalPrice(newQuantity * product?.price);
+  };
+
+  // adding to cart
+
+  const handleCart = async () => {
+    if (currentLoggedInUser) {
+      try {
+        const responses = await handleAddToCart(product, quantity);
+        console.log("responsessss", responses);
+
+        // toast.success("product added successfully");
+        // setTimeout(() => {
+        //   navigate("/cart-details");
+        // }, 3000);
+      } catch (err) {
+        console.log(err);
+        toast.error(err);
+      }
+    } else {
+      toast.error("Please login to add to cart");
+      setTimeout(() => {
+        navigate("/signin");
+      }, 2000);
+    }
   };
   return (
     <div className="my-20 mx-20">
@@ -54,7 +83,9 @@ const ProductDetails = () => {
       <div>
         <p>Total:{totalprice.toFixed(2)}</p>
       </div>
-      <button className="bg-slate-900 text-white p-1">Add to cart</button>
+      <button className="bg-slate-900 text-white p-1" onClick={handleCart}>
+        Add to cart
+      </button>
     </div>
   );
 };
